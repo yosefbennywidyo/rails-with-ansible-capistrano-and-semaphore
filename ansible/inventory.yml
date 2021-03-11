@@ -1,0 +1,7 @@
+all:
+  hosts:
+    yosefbennywidyo_digital_ocean:
+      ansible_host: 104.131.167.18
+      ansible_connection: ssh
+      ansible_user: root
+      private_key_file: ~/.ssh/id_ed25519_yosefbennywidyo_elxr
