@@ -215,6 +215,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   capistrano (~> 3.16)
+  capistrano-bundler (~> 2.0)
   capistrano-chruby
   capistrano-rails (~> 1.6)
   capistrano3-puma!
