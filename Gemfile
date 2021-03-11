@@ -57,6 +57,8 @@ group :development do
   gem 'capistrano-secrets-yml', '~> 1.1.0'
   # manage database.yml with capistrano
   gem 'capistrano-database-yml', '~> 1.0.0'
+  # manage rails tasks
+  gem 'capistrano-rails-collection'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
