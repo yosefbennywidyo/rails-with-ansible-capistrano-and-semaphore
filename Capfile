@@ -4,10 +4,11 @@ require "capistrano/setup"
 # Include default deployment tasks
 require "capistrano/deploy"
 
-# Include capistrano-rails
-require "capistrano/rails/assets"
-require "capistrano/rails/migrations"
-# require "capistrano/passenger"
+# Include capistrano secrets_yml
+require 'capistrano/secrets_yml'
+
+# Include capistrano-database_yml
+require 'capistrano/database_yml'
 
 # Include capistrano-bundler
 require 'capistrano/bundler'
@@ -15,6 +16,11 @@ require 'capistrano/bundler'
 # Include capistrano-puma
 require "capistrano/puma"
 install_plugin Capistrano::Puma
+
+# Include capistrano-rails
+require "capistrano/rails/assets"
+require "capistrano/rails/migrations"
+# require "capistrano/passenger"
 
 # Load the SCM plugin appropriate to your project:
 #
