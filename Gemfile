@@ -53,6 +53,10 @@ group :development do
   gem 'capistrano-chruby'
   # manage puma with capistrano
   gem 'capistrano3-puma', github: "seuros/capistrano-puma"
+  # manage secrets.yml with capistrano
+  gem 'capistrano-secrets-yml', '~> 1.1.0'
+  # manage database.yml with capistrano
+  gem 'capistrano-database-yml', '~> 1.0.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
