@@ -28,6 +28,10 @@ gem 'jbuilder', '~> 2.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
+# required gems for key type "ssh-ed25519"
+gem 'ed25519', '>= 1.2', '< 2.0'
+gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -42,6 +46,13 @@ group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  # Deploy with Capistrano
+  gem 'capistrano', '~> 3.16', require: false
+  gem 'capistrano-rails', '~> 1.6'
+  gem 'capistrano-bundler', '~> 2.0'
+  gem 'capistrano-chruby'
+  # manage puma with capistrano
+  gem 'capistrano3-puma', github: "seuros/capistrano-puma"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
