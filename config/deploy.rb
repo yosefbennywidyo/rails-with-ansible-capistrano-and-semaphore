@@ -6,6 +6,7 @@ set :repo_url, "git@github.com:yosefbennywidyo/rails-with-ansible-capistrano-and
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+set :branch, "main"
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/home/deploy/apps"
