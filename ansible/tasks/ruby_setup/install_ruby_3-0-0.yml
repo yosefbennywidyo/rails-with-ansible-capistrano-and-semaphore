@@ -1,0 +1,5 @@
+- name: Install Ruby
+  become_user: deploy
+  command: /usr/local/bin/ruby-install --no-install-deps ruby 3.0.0 -- --with-jemalloc
+  args:
+    creates: /home/deploy/.rubies/ruby-3.0.0

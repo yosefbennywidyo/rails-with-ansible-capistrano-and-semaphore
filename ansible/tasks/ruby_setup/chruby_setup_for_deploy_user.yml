@@ -1,0 +1,31 @@
+- name: Download chruby
+  become: no
+  get_url:
+    url: https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
+    dest: /home/deploy/chruby-0.3.9.tar.gz
+
+- name: Extract chruby tarball
+  become: no
+  unarchive:
+    src: /home/deploy/chruby-0.3.9.tar.gz
+    dest: /home/deploy
+    creates: /home/deploy/chruby-0.3.9
+    remote_src: yes
+
+- name: Install chruby
+  make:
+    chdir: /home/deploy/chruby-0.3.9
+    target: install
+
+- name: Load chruby for deploy user
+  lineinfile:
+    path: /home/deploy/.bashrc
+    regexp: 'chruby.sh$'
+    line: 'source /usr/local/share/chruby/chruby.sh'
+    insertbefore: BOF
+
+- name: Set ruby version for deploy user
+  lineinfile:
+    path: /home/deploy/.profile
+    regexp: '^chruby'
+    line: 'chruby ruby-3.0.0'

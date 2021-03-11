@@ -1,0 +1,6 @@
+- name: Setup authorized key for deploy user
+  # authorized_key: user=deploy key="{{ lookup('file', '/Users/yb_widyokarsono/.ssh/id_ed25519_yosefbennywidyo_deploy.pub') }}"
+  ansible.posix.authorized_key:
+    user: deploy
+    state: present
+    key: "{{ lookup('file', '/Users/yb_widyokarsono/.ssh/id_ed25519_yosefbennywidyo_deploy.pub') }}"

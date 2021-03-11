@@ -1,0 +1,10 @@
+- name: Check deploy is logged in
+  command: 'whoami'
+  become: true
+  become_method: su
+  become_user: deploy
+  register: myidentity
+
+- name: Logged in as
+  debug:
+    msg: '{{ myidentity.stdout }}'

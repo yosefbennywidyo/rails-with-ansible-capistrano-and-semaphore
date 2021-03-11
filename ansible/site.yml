@@ -2,107 +2,24 @@
   remote_user: root
   become: yes
   tasks:
-    - name: Check current_user logged in
-      command: 'whoami'
-      become: true
-      become_method: su
-      become_user: root
-      register: myidentity
-
-    - name: Logged in as
-      debug:
-        msg: '{{ myidentity.stdout }}'
+    - include: tasks/user_check/check_root_is_logged_in.yml
 
     - name: Update all packages to the latest version
       apt:
         upgrade: dist
 
-    - name: Add deploy user
-      user:
-        name: deploy
-        shell: /bin/bash
+    - include: tasks/authentication_setup/deploy_user_setup.yml
 
-    - name: Add SSH key to server for deploy user
-      authorized_key:
-        user: deploy
-        key: "{{ lookup('file', '/Users/yb_widyokarsono/.ssh/id_ed25519_yosefbennywidyo_deploy.pub') }}"
+    - include: tasks/ruby_setup/ruby-install_setup.yml
 
-    - name: Install Ruby dependencies
-      apt:
-        name: ['git-core', 'gcc', 'autoconf', 'bison', 'build-essential', 'checkinstall', 'zlib1g-dev', 'openssl', 'libssl-dev', 'libyaml-dev', 'libreadline-dev', 'libreadline6-dev', 'libxml2-dev', 'libffi-dev', 'libncurses5-dev', 'libxslt1-dev', 'libcurl4-openssl-dev', 'software-properties-common', 'libffi-dev', 'zlib1g-dev', 'postgresql', 'postgresql-contrib', 'nodejs', 'yarn', 'libjemalloc-dev']
-
-    - name: Download ruby-install
-      become: no
-      get_url:
-        url: https://github.com/postmodern/ruby-install/archive/v0.8.1.tar.gz
-        dest: /home/deploy/ruby-install-0.8.1.tar.gz
-
-    - name: Extract ruby-install tarball
-      unarchive:
-        src: /home/deploy/ruby-install-0.8.1.tar.gz
-        dest: /home/deploy
-        creates: /home/deploy/ruby-install-0.8.1
-        remote_src: yes
-
-    - name: Setup authorized key for deploy user
-      authorized_key: user=deploy key="{{ lookup('file', '/Users/yb_widyokarsono/.ssh/id_ed25519_yosefbennywidyo_deploy.pub') }}"
+    - include: tasks/authentication_setup/setup_authorized_key_for_deploy_user.yml
     
-    - name: Check current_user logged in
-      command: 'whoami'
-      become: true
-      become_method: su
-      become_user: deploy
-      register: myidentity
+    - include: tasks/user_check/check_deploy_is_logged_in.yml
 
-    - name: Logged in as
-      debug:
-        msg: '{{ myidentity.stdout }}'
-
-    - name: Install Ruby
-      become_user: deploy
-      command: /usr/local/bin/ruby-install --no-install-deps ruby 3.0.0 -- --with-jemalloc
-      args:
-        creates: /home/deploy/.rubies/ruby-3.0.0
+    - include: tasks/ruby_setup/install_ruby_3-0-0.yml
     
-    - name: Download chruby
-      become: no
-      get_url:
-        url: https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
-        dest: /home/deploy/chruby-0.3.9.tar.gz
+    - include: tasks/ruby_setup/chruby_setup_for_deploy_user.yml
 
-    - name: Extract chruby tarball
-      become: no
-      unarchive:
-        src: /home/deploy/chruby-0.3.9.tar.gz
-        dest: /home/deploy
-        creates: /home/deploy/chruby-0.3.9
-        remote_src: yes
+    - include: tasks/ruby_setup/install_bundler.yml
 
-    - name: Install chruby
-      make:
-        chdir: /home/deploy/chruby-0.3.9
-        target: install
-
-    - name: Load chruby for deploy user
-      lineinfile:
-        path: /home/deploy/.bashrc
-        regexp: 'chruby.sh$'
-        line: 'source /usr/local/share/chruby/chruby.sh'
-        insertbefore: BOF
-
-    - name: Set ruby version for deploy user
-      lineinfile:
-        path: /home/deploy/.profile
-        regexp: '^chruby'
-        line: 'chruby ruby-3.0.0'
-
-    - name: Install bundler
-      become_user: deploy
-      command: 'chruby-exec ruby-3.0.0 -- gem install bundler'
-      args:
-        creates: /home/deploy/.gem/ruby/2.5.0/bin/bundle
-
-    - name: Install nginx
-      apt:
-        name: nginx
-        state: latest
+    - include: tasks/nginx_setup/install_nginx.yml

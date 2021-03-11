@@ -1,0 +1,16 @@
+- name: Install Ruby dependencies
+  apt:
+    name: ['git-core', 'gcc', 'autoconf', 'bison', 'build-essential', 'checkinstall', 'zlib1g-dev', 'openssl', 'libssl-dev', 'libyaml-dev', 'libreadline-dev', 'libreadline6-dev', 'libxml2-dev', 'libffi-dev', 'libncurses5-dev', 'libxslt1-dev', 'libcurl4-openssl-dev', 'software-properties-common', 'libffi-dev', 'zlib1g-dev', 'postgresql', 'postgresql-contrib', 'nodejs', 'yarn', 'libjemalloc-dev']
+
+- name: Download ruby-install
+  become: no
+  get_url:
+    url: https://github.com/postmodern/ruby-install/archive/v0.8.1.tar.gz
+    dest: /home/deploy/ruby-install-0.8.1.tar.gz
+
+- name: Extract ruby-install tarball
+  unarchive:
+    src: /home/deploy/ruby-install-0.8.1.tar.gz
+    dest: /home/deploy
+    creates: /home/deploy/ruby-install-0.8.1
+    remote_src: yes

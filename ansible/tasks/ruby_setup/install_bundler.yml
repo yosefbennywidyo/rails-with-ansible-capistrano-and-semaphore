@@ -1,0 +1,5 @@
+- name: Install bundler
+  become_user: deploy
+  command: 'chruby-exec ruby-3.0.0 -- gem install bundler'
+  args:
+    creates: /home/deploy/.gem/ruby/3.0.0/bin/bundle
