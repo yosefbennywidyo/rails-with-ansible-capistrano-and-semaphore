@@ -11,7 +11,7 @@ require 'capistrano/secrets_yml'
 require 'capistrano/database_yml'
 
 # Include capistrano-bundler
-require 'capistrano/bundler'
+#require 'capistrano/bundler'
 
 # Include capistrano-puma
 require "capistrano/puma"
