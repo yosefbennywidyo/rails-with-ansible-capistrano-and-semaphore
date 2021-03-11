@@ -23,6 +23,7 @@ install_plugin Capistrano::Puma  # Default puma tasks
 # Include capistrano-rails
 require "capistrano/rails/assets"
 require "capistrano/rails/migrations"
+require 'capistrano/rails/collection'
 # require "capistrano/passenger"
 
 # Load the SCM plugin appropriate to your project:
