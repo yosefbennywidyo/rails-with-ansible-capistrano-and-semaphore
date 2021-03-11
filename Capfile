@@ -4,6 +4,18 @@ require "capistrano/setup"
 # Include default deployment tasks
 require "capistrano/deploy"
 
+# Include capistrano-rails
+require "capistrano/rails/assets"
+require "capistrano/rails/migrations"
+# require "capistrano/passenger"
+
+# Include capistrano-bundler
+require 'capistrano/bundler'
+
+# Include capistrano-puma
+require "capistrano/puma"
+install_plugin Capistrano::Puma
+
 # Load the SCM plugin appropriate to your project:
 #
 # require "capistrano/scm/hg"
