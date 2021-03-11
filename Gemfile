@@ -49,7 +49,7 @@ group :development do
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.16', require: false
   gem 'capistrano-rails', '~> 1.6'
-  gem 'capistrano-bundler', '~> 2.0'
+  #gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-chruby'
   # manage puma with capistrano
   gem 'capistrano3-puma', github: "seuros/capistrano-puma"

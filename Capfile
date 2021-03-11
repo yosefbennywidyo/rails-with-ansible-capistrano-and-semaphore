@@ -10,7 +10,7 @@ require 'capistrano/secrets_yml'
 # Include capistrano-database_yml
 require 'capistrano/database_yml'
 
-# Include capistrano-bundler
+require 'capistrano/chruby'
 require 'capistrano/bundler'
 
 # Include capistrano-puma
