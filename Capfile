@@ -10,12 +10,15 @@ require 'capistrano/secrets_yml'
 # Include capistrano-database_yml
 require 'capistrano/database_yml'
 
-require 'capistrano/chruby'
 require 'capistrano/bundler'
-
+require 'capistrano/chruby'
 # Include capistrano-puma
 require "capistrano/puma"
-install_plugin Capistrano::Puma
+install_plugin Capistrano::Puma  # Default puma tasks
+# install_plugin Capistrano::Puma::Workers  # if you want to control the workers (in cluster mode)
+# install_plugin Capistrano::Puma::Jungle # if you need the jungle tasks
+# install_plugin Capistrano::Puma::Monit  # if you need the monit tasks
+# install_plugin Capistrano::Puma::Nginx  # if you want to upload a nginx site template
 
 # Include capistrano-rails
 require "capistrano/rails/assets"
