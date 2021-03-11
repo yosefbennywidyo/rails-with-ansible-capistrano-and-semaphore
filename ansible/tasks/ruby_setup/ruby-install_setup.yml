@@ -14,3 +14,7 @@
     dest: /home/deploy
     creates: /home/deploy/ruby-install-0.8.1
     remote_src: yes
+    
+- name: Install yarn
+  become_user: deploy
+  command: 'npm install --global yarn -v 1.22.10'
