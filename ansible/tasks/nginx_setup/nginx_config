@@ -1,139 +1,375 @@
-# This is example contains the bare mininum to get nginx going with
-# Unicorn or Rainbows! servers.  Generally these configuration settings
-# are applicable to other HTTP application servers (and not just Ruby
-# ones), so if you have one working well for proxying another app
-# server, feel free to continue using it.
+# A commented nginx configuration file for Ruby on Rails
 #
-# The only setting we feel strongly about is the fail_timeout=0
-# directive in the "upstream" block.  max_fails=0 also has the same
-# effect as fail_timeout=0 for current versions of nginx and may be
-# used in its place.
+# Author: Tommaso Pavese
+#         tommaso@pavese.me
+#         http://tommaso.pavese.me
 #
-# Users are strongly encouraged to refer to nginx documentation for more
-# details and search for other example configs.
+# License: http://www.wtfpl.net/
+#
+#
+# Tested with:
+#   Ubuntu 12.04
+#   nginx  1.4.1 - 1.4.7
+#   Rails  3.2 - 4.0
+#   Unicorn, Thin and Puma
+#
+#
+# Docs:
+# http://nginx.org/en/docs/
+#
+# Configuration measurement units:
+# http://nginx.org/en/docs/syntax.html
+#
+# Each module can define its variables, the core ones:
+# http://nginx.org/en/docs/http/ngx_http_core_module.html#variables
+#    
+# 
+# As reference, the official example for nginx + unicorn:
+# https://github.com/defunkt/unicorn/blob/master/examples/nginx.conf
+#
+#
+# In order to bind to port 80, the master process must be executed as root:
+# $ sudo /usr/sbin/nginx -c /etc/nginx/nginx.conf
+#
 
-# you generally only need one nginx worker unless you're serving
-# large amounts of static files which require blocking disk reads
+# How to execute the worker processes
+user deploy root;
+
+# A single worker is enough for load balancing and reverse proxing.
+# However:
+#  Disk I/O can block an nginx worker (depends on disk read performance).
+#  If the server is serving a lot of static files (e.g. assets) it is
+#  a good idea to increase the number of worker processes.
 worker_processes 1;
 
-# # drop privileges, root is needed on most systems for binding to port 80
-# # (or anything < 1024).  Capability-based security may be available for
-# # your system and worth checking out so you won't need to be root to
-# # start nginx to bind on 80
-user deploy; # for systems with a "nogroup"
-# user deploy deploy; # for systems with "nobody" as a group instead
 
-# Feel free to change all paths to suite your needs here, of course
-pid /tmp/nginx.pid;
-error_log /tmp/nginx.error.log;
+# The limit on the maximum number of open files for worker processes.
+# "open files" is intended as UNIX open file descriptors.
+# This overrides the limit set by the OS for the user the workers run as.
+# Run `ulimit -a` in a shell to see the current limit.
+worker_rlimit_nofile 2048;
+
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+
+# --------------------------------------------------------
 
 events {
   worker_connections 1024; # increase if you have lots of clients
-  accept_mutex off; # "on" if nginx worker_processes > 1
-  # use epoll; # enable for Linux 2.6+
-  # use kqueue; # enable for FreeBSD, OSX
+  accept_mutex off;        # "on" if nginx worker_processes > 1
+  use epoll;               # best for Linux 2.6+ ("kqueue" for FreeBSD, OSX)
 }
 
+
+
+# --------------------------------------------------------
+
 http {
-  # nginx will find this file in the config directory set at nginx build time
-  include mime.types;
+  # disables emitting nginx version in error messages
+  # and in the “Server” response header field
+  server_tokens off;
 
-  # fallback in case we can't determine a type
-  default_type application/octet-stream;
+  # MIME types
+  include /etc/nginx/mime.types;
+  
+  # fallback MIME type if the client doesn't specify it.
+  default_type application/octet-stream;  
 
-  # click tracking!
-  access_log /tmp/nginx.access.log combined;
+  # log
+  access_log /var/log/nginx/access.log combined;
 
-  # you generally want to serve static files with nginx since neither
-  # Unicorn nor Rainbows! is optimized for it at the moment
+  # TCP settings
+  tcp_nopush on;
+  tcp_nodelay off;
+
+
+  # use unix sendfile()
   sendfile on;
 
-  tcp_nopush on; # off may be better for *some* Comet/long-poll stuff
-  tcp_nodelay off; # on may be better for some Comet/long-poll stuff
-
-  # we haven't checked to see if Rack::Deflate on the app server is
-  # faster or not than doing compression via nginx.  It's easier
-  # to configure it all in one place here for static files and also
-  # to disable gzip for clients who don't get gzip/deflate right.
-  # There are other other gzip settings that may be needed used to deal with
-  # bad clients out there, see http://wiki.nginx.org/NginxHttpGzipModule
+  # gzip compression
   gzip on;
   gzip_http_version 1.0;
   gzip_proxied any;
+  gzip_vary on;
   gzip_min_length 500;
   gzip_disable "MSIE [1-6]\.";
   gzip_types text/plain text/xml text/css
              text/comma-separated-values
              text/javascript application/x-javascript
+             application/javascript application/json
              application/atom+xml;
+             # text/html is included by default
 
-  # this can be any application server, not just Unicorn/Rainbows!
-  upstream app_server {
-    # fail_timeout=0 means we always retry an upstream even if it failed
-    # to return a good HTTP response (in case the Unicorn master nukes a
-    # single worker for timing out).
 
-    # for UNIX domain socket setups:
-    server unix:/home/deploy/apps/shared/tmp/sockets/puma.sock fail_timeout=0;
+  # According to the HTTP standard, headers with underscores are perfectly valid.
+  # However, nginx defaults to dropping headers containing underscores, as they
+  # might introduce ambiguities when mapping headers to CGI variables.
+  #
+  # Since this is not a problem with Ruby on Rails, we can safely enable them.
+  underscores_in_headers on;
 
-    # for TCP setups, point these to your backend servers
-    # server 192.168.0.7:8080 fail_timeout=0;
-    # server 192.168.0.8:8080 fail_timeout=0;
-    # server 192.168.0.9:8080 fail_timeout=0;
+
+
+
+  # --------------------------------------------------------
+  # It's possible to organize the server configuration in different files.
+  #
+  # Typically, these site-specific files contain at least:
+  #  - a server{} block
+  #  - an upstream{} block
+  #
+  # The convention is to store configuration files in:
+  #    /etc/nginx/sites-availbale/
+  #
+  # and then symlink them into:
+  #    /etc/nginx/sites-enabled/
+  #
+  # with:
+  #  $ ln -s /etc/nginx/sites-availbale/example.com.conf /etc/nginx/sites-enabled/example.com.conf 
+  #
+  # After that, send a HUP signal to the nginx master to reload the configuration on the fly:
+  #  $ sudo kill -HUP `cat /var/run/nginx.pid`
+  #
+  #
+  include /etc/nginx/sites-enabled/*;
+
+
+
+
+
+  # --------------------------------------------------------
+  # upstream destinations
+  #
+  # http://nginx.org/en/docs/http/ngx_http_upstream_module.html#upstream
+  #
+  # fail_timeout=0 means we always retry an upstream even if it failed
+  # to return a good HTTP response.
+  # This happens when the Unicorn master nukes a single worker for timing out.
+  #
+  # Sockets can be opened at any location where the user has writing access,
+  # even inside the rails_root/tmp/sockets directory
+  #
+  # We can also use IP addresses and domain names, and mix them together.
+  #
+  # If more than one destination server is specified, the requests
+  # are distributed using a weighted round-robin balancing method.
+  #
+  # Important:
+  #   Unicorn workers can all listen on the same Unix socket (or TCP port)
+  #   at the same time.
+  #   However, this might not be true for other servers.
+  #   A cluster of Thins, for example, will require a Unix socket per process.
+  #   Look at the second upstream block for an example.
+  
+  # This works well with Unicorn (yes, even with several workers)
+  upstream rails_app_one {
+    server unix:/home/deploy/apps/shared/tmp/sockets/puma.sock  fail_timeout=0;
   }
 
-  server {
-    # listen 80 default deferred; # for Linux
-    # listen 80 default accept_filter=httpready; # for FreeBSD
-    listen 80 default;
+  # This will work with a cluster of 3 Thin servers
+  #upstream rails_app_two {
+  #  server unix:/tmp/rails_app_two.0.sock  fail_timeout=0;
+  #  server unix:/tmp/rails_app_two.1.sock  fail_timeout=0;
+  #  server unix:/tmp/rails_app_two.2.sock  fail_timeout=0;
+  #}
 
-    client_max_body_size 4G;
+  # This is weird, but it would still work.
+  #upstream rails_app_three {
+  #  server unix:/tmp/rails_app_three.sock         fail_timeout=0;
+  #  server 192.168.0.7:8080                       fail_timeout=0;
+  #  server 127.0.0.1:3000                weight=3 fail_timeout=0;
+  #  server backendworker.example.com     weight=5 fail_timeout=0;
+  #}
+
+  # --------------------------------------------------------
+  # servers
+
+
+  # This server listens to port 80 and 443, and is configured to accept
+  # both HTTP and HTTPS traffic on the same domain.
+  # The Rails app can then decide to enforce HTTPS on the whole application
+  # or only on specific controllers.
+  #
+  server {
+    # Only one server can use the 'default_server' and 'deferred' options.
+    listen 80 default_server deferred;
+
+    # http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name
+    #
+    # Also accepts lists of names, wildcard characters and regular expressions.
+    # Make sure that they all match the SSL/TSL certificate, if using one.
+    # See the last server block for more examples.
     server_name 104.131.167.18 www.widyokarsono.dev;
 
-    # ~2 seconds is often enough for most folks to parse HTML/CSS and
-    # retrieve needed images/icons/frames, connections are cheap in
-    # nginx so increasing this is generally safe...
-    keepalive_timeout 5;
+    # HTTPS
+    # http://nginx.org/en/docs/http/configuring_https_servers.html
+    #
+    # If the key has a passphrase, nginx will require it each time it will
+    # boot or restart (making automatic management impossible).
+    #listen 443 ssl;
+    #ssl_certificate     /etc/nginx/sslfiles/example_com_chained.crt;
+    #ssl_certificate_key /etc/nginx/sslfiles/example_com_ssl_nopf.key;
+    #ssl_session_cache   shared:example_ssl_cache:1m;
+    #ssl_session_timeout 5m;
 
-    # path for static files
+
+    client_max_body_size 4G; # default 1M
+    keepalive_timeout 20s;   # default 75s
+
     root /home/deploy/apps/current/public;
 
-    location / {
-      # an HTTP header important enough to have its own Wikipedia entry:
-      #   http://en.wikipedia.org/wiki/X-Forwarded-For
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    # http://nginx.org/en/docs/http/ngx_http_core_module.html#try_files
+    #
+    # Tries URIs in sequence until one is found.
+    # First we try to serve static files directly from nginx.
+    # The rails application is the last alternative.
+    #
+    # See comment block at the end of the file for detailed examples.
+    #
+    # /maintenance.html can be symlinked into public/ to stop requests
+    # before they reach the rails app (e.g. while updating the DB).
+    # When it does not exist (normally), it's quickly skipped.
+    #
+    try_files /maintenance.html $uri $uri/index.html $uri.html @rails_app;
 
-      # enable this if and only if you use HTTPS, this helps Rack
-      # set the proper protocol for doing redirects:
-      # proxy_set_header X-Forwarded-Proto https;
 
-      # pass the Host: header from the client right along so redirects
-      # can be set properly within the Rack application
-      proxy_set_header Host $http_host;
-
-      # we don't want nginx trying to do something clever with
-      # redirects, we set the Host: header above already.
-      proxy_redirect off;
-
-      # set "proxy_buffering off" *only* for Rainbows! when doing
-      # Comet/long-poll stuff.  It's also safe to set if you're
-      # using only serving fast clients with Unicorn + nginx.
-      # Otherwise you _want_ nginx to buffer responses to slow
-      # clients, really.
-      # proxy_buffering off;
-
-      # Try to serve static files from nginx, no point in making an
-      # *application* server like Unicorn/Rainbows! serve static files.
-      if (!-f $request_filename) {
-        proxy_pass http://app_server;
-        break;
-      }
+    # The location directory allows very creative configurations.
+    # http://nginx.org/en/docs/http/ngx_http_core_module.html#location
+    #
+    # This is just a named location to be used in try_files.
+    location @rails_app {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; # the client IP
+      proxy_set_header X-Real-IP $remote_addr; # the client IP (again)
+      proxy_set_header X-Forwarded-Proto $scheme; # pass scheme (for HTTPS)
+      proxy_set_header Host $http_host; # the full host, for redirects within Rails
+      proxy_redirect off; # disable nginx redirect-rewrite logic
+      proxy_pass http://rails_app_one; # http is to be used even for https traffic
     }
 
-    # Rails error pages
+
+    # Customize what html file should be served for different errors.
     error_page 500 502 503 504 /500.html;
-    location = /500.html {
-      root /home/deploy/apps/current/public;
+
+    # This location block isn't strictly required, as '/500.html'
+    # can also be served by 'try_files $uri', above. Still, this
+    # location is more precise (thus has higher priority) and can
+    # be used to further customize the error response.
+    #
+    # location = /500.html { }
+  }
+
+  # A redirect from the naked domain to www
+  #
+  # This listens to port 80, thus it can't handle HTTPS traffic.
+  # (therefore, using $scheme instead of http is a bit useless)
+  #
+  # If the certificate is also compatible with the naked domain,
+  # then this server block can be improved by replicating here
+  # the SSL configuration of the main server.
+  server {
+    listen 80;
+    server_name 104.131.167.18;
+    return 301 $scheme://www.widyokarsono.dev$request_uri;
+  }
+
+
+
+  # ----------------------------
+
+  # This server block features an efficient configuration
+  # to serve the pre-gzipped version of the static assets
+
+  #server {
+  #  listen 80;
+  #  server_name .widyokarsono.dev
+  #              www.widyokarsono.dev
+  #              *.widyokarsono.dev;
+
+  #  client_max_body_size 4G;
+  #  keepalive_timeout 10s;
+
+  #  root /home/deploy/apps/current/public;
+  #  try_files $uri $uri/index.html $uri.html @rails_app;
+
+  #  error_page 500 502 503 504 /500.html;
+
+
+  #  location @rails_app {
+  #    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  #    proxy_set_header X-Real-IP $remote_addr;
+  #    proxy_set_header X-Forwarded-Proto $scheme;
+  #    proxy_set_header Host $http_host;
+  #    proxy_redirect off;
+  #    proxy_pass http://rails_app_two;
+  #  }
+
+    # Location block for the assets.
+    # See: http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
+    #
+    # '^~ /assets/' is a 'prefix string', not a regex.
+    # '^~' will prevent further location searching after this location is matched.
+    #
+    # 'root' is inherited from the parent block. With the default Rails directory
+    # structure it should point to 'app_root/public'.
+    #
+    location ^~ /assets/ {
+      # To serve the pre-gzipped version of the files, if available.
+      # The non-compressed versions MUST be available too, or a 404 will be returned.
+      # The general gzip directives in the 'http' block are still applied.
+      gzip_static on;
+
+      # Since Rails automatically appends digest fingerprints to asset file names,
+      # we don't need to worry about expiring them.
+      expires max;
+      add_header Cache-Control public;
+
+      # Or:
+      # expires 12h;
+      # add_header Cache-Control "public, must-revalidate";
+      
+      # The 'try_files' directive is NOT inherited from the parent block.
+      try_files $uri =404;
+
+      # We could also use a less strict directive that falls back to the Rails app
+      # if a requested asset cannot be found. In this case, the cache headers here
+      # configured will be ignored and Rails will set them automatically.
+      # try_files $uri @rails_app;
+
+      # Normally the Rails app takes care of serving the static file 'public/404.html'
+      # when a 404 occours. Here, however, it will be handled by nginx.
+      error_page 404 /404.html;
     }
   }
+
 }
+
+
+
+
+# A note on $uri and the try_files directive:
+#
+# try_files /maintenance.html $uri $uri/index.html $uri.html @rails_app;
+#
+#
+# /maintenance.html
+#     if this file exists (likely a symlink), the app is probably not
+#     available (updating the DB?). We serve it directly.
+#
+# $uri
+#     it could be an asset.
+#     e.g. assets/application.css
+#
+# $uri/index.html
+#     it could be a directory in the file system. In that
+#     case we look for an index.html file.
+#
+# $uri.html
+#     it could be an actual html file.
+#     e.g. 500.html
+#
+# @rails_app
+#     finally, if all other tests fail, we pass the request to the app
+#
