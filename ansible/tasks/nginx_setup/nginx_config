@@ -1,5 +1,5 @@
 upstream app {
-  server unix:///home/deploy/apps/tmp/sockets/puma.sock fail_timeout=0;
+  server unix:///home/deploy/apps/shared/tmp/sockets/puma.sock fail_timeout=0;
 }
 server {
   server_name 104.131.167.18 www.widyokarsono.dev;
