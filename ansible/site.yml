@@ -30,6 +30,25 @@
         dest: /etc/nginx/sites-available/rails
       notify:
         - Restart nginx
+
+    - name: Recursively change directory permission "/home/deploy/apps/current/public/"
+      ansible.builtin.file:
+        path: /home/deploy/apps/current/public/
+        state: directory
+        mode: '644'
+        recurse: yes
+        owner: deploy
+        group: root
+    
+    - name: Recursively change directory permission "/home/deploy/apps/shared/tmp/sockets/"
+      ansible.builtin.file:
+        path: /home/deploy/apps/shared/tmp/sockets/
+        state: directory
+        mode: '644'
+        recurse: yes
+        owner: deploy
+        group: root
+
     - name: Disable default nginx config
       file:
         path: /etc/nginx/sites-enabled/default
