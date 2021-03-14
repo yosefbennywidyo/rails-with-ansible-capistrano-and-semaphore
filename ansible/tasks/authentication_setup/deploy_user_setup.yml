@@ -3,17 +3,14 @@
     name: deploy
     shell: /bin/bash
 
-- name: Permission setup for deploy user
-  become_user: root
-  # chmod 700: owner can read, write, execute
-  command: chmod 700 /home/deploy/.ssh
-
-- name: Setup shell for deploy user
-  command: usermod -s /bin/bash deploy
-
-- name: Setup authorized_keys only for deploy user
-  # chmod 400: owner can read, write, execute
-  command: chmod 400 /home/deploy/.ssh/authorized_keys
+- name: Recursively change ownership of "/home/deploy" directory
+  ansible.builtin.file:
+    path: /home/deploy/
+    state: directory
+    mode: '700'
+    recurse: yes
+    owner: deploy
+    group: root
 
 - name: Setup home only for deploy user
   # chmod 400: owner can read, write, execute
