@@ -33,7 +33,7 @@
 #
 
 # How to execute the worker processes
-user web;
+user deploy;
 
 # A single worker is enough for load balancing and reverse proxing.
 # However:
