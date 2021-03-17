@@ -31,29 +31,11 @@
       notify:
         - Restart nginx
 
-    - name: Recursively change directory permission "/home/deploy/apps/current/public/"
+    - name: Recursively change directory permission "/home/deploy/apps/"
       ansible.builtin.file:
-        path: /home/deploy/apps/current/public/
+        path: /home/deploy/apps/
         state: directory
-        mode: '644'
-        recurse: yes
-        owner: deploy
-        group: root
-
-    - name: Recursively change directory permission "/home/deploy/apps/releases/"
-      ansible.builtin.file:
-        path: /home/deploy/apps/releases/
-        state: directory
-        mode: '644'
-        recurse: yes
-        owner: deploy
-        group: root
-    
-    - name: Recursively change directory permission "/home/deploy/apps/shared/tmp/sockets/"
-      ansible.builtin.file:
-        path: /home/deploy/apps/shared/tmp/sockets/
-        state: directory
-        mode: '644'
+        mode: '700'
         recurse: yes
         owner: deploy
         group: root
