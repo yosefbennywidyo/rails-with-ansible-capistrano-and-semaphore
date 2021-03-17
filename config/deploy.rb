@@ -12,6 +12,9 @@ set :branch, "main"
 set :deploy_to, "/home/deploy/apps"
 set :chruby_ruby, "ruby-3.0.0"
 
+# Skip precompile assets
+set :assets_roles, []
+
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
