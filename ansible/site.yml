@@ -39,6 +39,15 @@
         recurse: yes
         owner: deploy
         group: root
+
+    - name: Recursively change directory permission "/home/deploy/apps/releases/"
+      ansible.builtin.file:
+        path: /home/deploy/apps/releases/
+        state: directory
+        mode: '644'
+        recurse: yes
+        owner: deploy
+        group: root
     
     - name: Recursively change directory permission "/home/deploy/apps/shared/tmp/sockets/"
       ansible.builtin.file:
