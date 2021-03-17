@@ -2,7 +2,7 @@ upstream app {
   server unix:///home/deploy/apps/shared/tmp/sockets/puma.sock fail_timeout=0;
 }
 server {
-  server_name 104.131.167.18 www.widyokarsono.dev;
+  server_name 104.131.167.18 widyokarsono.dev www.widyokarsono.dev;
   listen 80;
   root /home/deploy/apps/current/public;
   try_files $uri/index.html $uri @app;
