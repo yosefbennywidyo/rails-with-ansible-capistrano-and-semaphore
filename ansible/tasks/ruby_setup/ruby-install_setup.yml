@@ -1,6 +1,14 @@
 - name: Install Ruby dependencies
   apt:
-    name: ['git-core', 'gcc', 'autoconf', 'bison', 'build-essential', 'checkinstall', 'zlib1g-dev', 'openssl', 'libssl-dev', 'libyaml-dev', 'libreadline-dev', 'libreadline6-dev', 'libxml2-dev', 'libffi-dev', 'libncurses5-dev', 'libxslt1-dev', 'libcurl4-openssl-dev', 'software-properties-common', 'libffi-dev', 'zlib1g-dev', 'postgresql', 'postgresql-contrib', 'nodejs', 'yarn', 'libjemalloc-dev']
+    name: ['git-core', 'gcc', 'autoconf', 'bison', 'build-essential', 'checkinstall', 'zlib1g-dev', 'openssl', 'libssl-dev', 'libyaml-dev', 'libreadline-dev', 'libreadline6-dev', 'libxml2-dev', 'libffi-dev', 'libncurses5-dev', 'libxslt1-dev', 'libcurl4-openssl-dev', 'software-properties-common', 'libffi-dev', 'zlib1g-dev', 'postgresql', 'postgresql-contrib', 'nodejs', 'yarn', 'libjemalloc-dev', 'software-properties-common', 'libpq-dev']
+
+- name: Create rails user and grant privs
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: ansible_rails
+    password: db_password
+    role_attr_flags: CREATEDB,NOSUPERUSER
 
 - name: Download ruby-install
   become: no
