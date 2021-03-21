@@ -1,7 +1,7 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.16.0"
 
-set :application, "rails-with-ansible-capistrano-and-semaphore"
+set :application, "app"
 set :repo_url, "git@github.com:yosefbennywidyo/rails-with-ansible-capistrano-and-semaphore.git"
 
 # Default branch is :master
