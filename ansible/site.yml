@@ -28,7 +28,7 @@
 
     - include: tasks/nginx_setup/install_nginx.yml
 
-    - name: Copy file with owner and permissions
+    - name: Copy puma.service with owner and permissions
       ansible.builtin.copy:
         src: puma.service
         dest: /etc/systemd/system/puma.service
