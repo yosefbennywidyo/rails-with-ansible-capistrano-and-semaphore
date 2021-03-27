@@ -65,14 +65,14 @@ set :puma_daemonize, true
 set :puma_plugins, []  #accept array of plugins
 set :puma_tag, fetch(:application)
 set :puma_restart_command, 'bundle exec puma'
-set :puma_service_unit_name, "puma_#{fetch(:application)}_#{fetch(:stage)}"
+set :puma_service_unit_name, "puma"
 set :puma_systemctl_user, :system # accepts :user
 set :puma_enable_lingering, fetch(:puma_systemctl_user) != :system # https://wiki.archlinux.org/index.php/systemd/User#Automatic_start-up_of_systemd_user_instances
 set :puma_lingering_user, fetch(:user)
 set :puma_service_unit_env_file, nil
 set :puma_service_unit_env_vars, []
 
-set :nginx_config_name,
+set :nginx_config_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :nginx_flags, 'fail_timeout=0'
 set :nginx_http_flags, fetch(:nginx_flags)
 set :nginx_server_name, "localhost #{fetch(:application)}.local"
