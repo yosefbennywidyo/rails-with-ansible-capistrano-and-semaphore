@@ -57,11 +57,11 @@ set :puma_error_log, "#{shared_path}/shared/log/puma_error.log"
 set :puma_role, :app
 set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
 set :puma_threads, [0, 16]
-set :puma_workers, 0
+set :puma_workers, 1
 set :puma_worker_timeout, nil
 set :puma_init_active_record, false
-set :puma_preload_app, false
-set :puma_daemonize, false
+set :puma_preload_app, true
+set :puma_daemonize, true
 set :puma_plugins, []  #accept array of plugins
 set :puma_tag, fetch(:application)
 set :puma_restart_command, 'bundle exec puma'
@@ -81,6 +81,6 @@ set :nginx_sites_enabled_path, '/etc/nginx/sites-enabled'
 set :nginx_socket_flags, fetch(:nginx_flags)
 set :nginx_ssl_certificate, "/etc/ssl/certs/ca-certificates.crt"
 set :nginx_ssl_certificate_key, "/etc/ssl/private/ssl-cert-snakeoil.key"
-set :nginx_use_ssl, false
+set :nginx_use_ssl, true
 set :nginx_use_http2, true
 set :nginx_downstream_uses_ssl, false

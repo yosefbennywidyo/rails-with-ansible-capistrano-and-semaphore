@@ -37,8 +37,8 @@
 
     - name: Copy puma.service with owner and permissions
       ansible.builtin.copy:
-        src: puma_app_production.service
-        dest: /etc/systemd/system/puma_app_production.service
+        src: puma.service
+        dest: /etc/systemd/system/puma.service
         owner: deploy
         group: root
         mode: '700'
