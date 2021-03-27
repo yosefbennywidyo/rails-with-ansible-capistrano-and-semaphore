@@ -64,7 +64,7 @@ set :puma_preload_app, true
 set :puma_daemonize, true
 set :puma_plugins, []  #accept array of plugins
 set :puma_tag, fetch(:application)
-set :puma_restart_command, 'bundle exec puma'
+set :puma_restart_command, 'sudo service puma restart'
 set :puma_service_unit_name, "puma"
 set :puma_systemctl_user, :system # accepts :user
 set :puma_enable_lingering, fetch(:puma_systemctl_user) != :system # https://wiki.archlinux.org/index.php/systemd/User#Automatic_start-up_of_systemd_user_instances
