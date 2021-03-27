@@ -60,3 +60,5 @@ server "104.131.167.18", user: "deploy", roles: %w{web app db}
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+set :pg_username, 'deploy'
+set :pg_system_user, 'deploy'
