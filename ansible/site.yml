@@ -32,7 +32,7 @@
             name: ANXS.postgresql
           vars:
             postgresql_users:
-              - name: ansible_rails
+              - name: deploy
                 password: "{{ db_password[0] }}"
 
     - name: Copy puma.service with owner and permissions
