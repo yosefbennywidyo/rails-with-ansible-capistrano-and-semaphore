@@ -1,6 +1,9 @@
 - hosts: yosefbennywidyo_digital_ocean
   remote_user: root
   become: yes
+  roles:
+    - role: ANXS.postgresql
+      become: yes
 
   vars_files:
   - ~/ansible/ansible_rails/db_password.yml
@@ -28,10 +31,20 @@
 
     - include: tasks/nginx_setup/install_nginx.yml
 
+    - block: # workaround, see https://stackoverflow.com/a/56558842
+        - name: PSQL installation and configuration
+          include_role:
+            name: ANXS.postgresql
+          vars:
+            postgresql_users:
+              - name: root
+                password: 
+      become: true
+
     - name: Copy puma.service with owner and permissions
       ansible.builtin.copy:
-        src: puma.service
-        dest: /etc/systemd/system/puma.service
+        src: puma_app_production.service
+        dest: /etc/systemd/system/puma_app_production.service
         owner: deploy
         group: root
         mode: '700'
