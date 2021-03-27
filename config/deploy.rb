@@ -44,6 +44,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+set :app_domain, "widyokarsono.dev"
 set :puma_user, fetch(:user)
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
 set :puma_state, "#{shared_path}/shared/tmp/pids/puma.state"
@@ -75,7 +76,7 @@ set :puma_service_unit_env_vars, []
 set :nginx_config_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :nginx_flags, 'fail_timeout=0'
 set :nginx_http_flags, fetch(:nginx_flags)
-set :nginx_server_name, "localhost #{fetch(:application)}.local"
+set :nginx_server_name, "#{fetch(:app_domain)}"
 set :nginx_sites_available_path, '/etc/nginx/sites-available'
 set :nginx_sites_enabled_path, '/etc/nginx/sites-enabled'
 set :nginx_socket_flags, fetch(:nginx_flags)
