@@ -72,7 +72,7 @@ set :puma_lingering_user, fetch(:user)
 set :puma_service_unit_env_file, nil
 set :puma_service_unit_env_vars, []
 
-set :nginx_config_name, "#{fetch(:application)}_#{fetch(:stage)}"
+set :nginx_config_name,
 set :nginx_flags, 'fail_timeout=0'
 set :nginx_http_flags, fetch(:nginx_flags)
 set :nginx_server_name, "localhost #{fetch(:application)}.local"
