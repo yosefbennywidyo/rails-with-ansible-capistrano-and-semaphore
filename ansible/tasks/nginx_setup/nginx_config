@@ -1,5 +1,3 @@
-user deploy;
-
 upstream app {
   server unix:/home/deploy/apps/shared/tmp/sockets/puma.sock fail_timeout=0;
 }
