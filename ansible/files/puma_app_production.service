@@ -7,9 +7,9 @@ Type=simple
 User=deploy
 Environment=RAILS_ENV=production
 WorkingDirectory=/home/deploy/apps/current/
-ExecStart=/usr/local/bin/chruby-exec ruby-3.0.0 -- bundle exec pumactl -C /home/deploy/apps/current/config/puma.rb start
-ExecStop=/usr/local/bin/chruby-exec ruby-3.0.0 -- bundle exec pumactl -F /home/deploy/apps/current/config/puma.rb stop
-ExecReload=/usr/local/bin/chruby-exec ruby-3.0.0 -- bundle exec pumactl -F /home/deploy/apps/current/config/puma.rb phased-restart
+ExecStart=/usr/local/bin/chruby-exec ruby-3.0.0 -- bundle exec pumactl start
+ExecStop=/usr/local/bin/chruby-exec ruby-3.0.0 -- bundle exec pumactl stop
+ExecReload=/usr/local/bin/chruby-exec ruby-3.0.0 -- bundle exec pumactl phased-restart
 TimeoutSec=15
 Restart=always
 KillMode=process
