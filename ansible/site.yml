@@ -1,9 +1,4 @@
-- hosts: yosefbennywidyo_digital_ocean
-  remote_user: root
-  become: yes
-  roles:
-    - role: ANXS.postgresql
-      become: yes
+- hosts: yosefbennywidyo_digital_ocean 
 
   vars_files:
   - ~/ansible/ansible_rails/db_password.yml
@@ -37,9 +32,8 @@
             name: ANXS.postgresql
           vars:
             postgresql_users:
-              - name: root
-                password: 
-      become: true
+              - name: ansible_rails
+                password: "{{ db_password[0] }}"
 
     - name: Copy puma.service with owner and permissions
       ansible.builtin.copy:
