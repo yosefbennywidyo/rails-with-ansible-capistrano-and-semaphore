@@ -15,6 +15,7 @@ set :chruby_ruby, "ruby-3.0.0"
 # Skip precompile assets
 set :assets_roles, []
 
+install_plugin Capistrano::Puma
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
