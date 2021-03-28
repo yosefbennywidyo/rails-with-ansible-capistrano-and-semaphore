@@ -31,9 +31,11 @@
     warn: false
 
 - name: Install node 15.5.1
-  shell: |
-    /bin/bash -c "source ~/.nvm/nvm.sh && nvm install 15.5.1 && nvm alias default 15.5.1"
+  shell: "~/.nvm/nvm.sh && nvm install 15.5.1 && nvm alias default 15.5.1"
   args:
+    creates: "/home/deploy/.nvm/versions/node-15.5.1"
+    chdir: "~"
+    executable: /bin/bash
     warn: false
 
 - name: Install YVM
