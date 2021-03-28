@@ -3,6 +3,14 @@
   vars_files:
   - ~/ansible/ansible_rails/db_password.yml
 
+  roles:
+  - role: ansible-role-nvm
+    nodejs_version: "15.5.1"
+    nvm_commands:
+      - "nvm exec default npm install"
+    become: true
+    become_user: nvm-user
+
   tasks:
     - include: tasks/user_check/check_root_is_logged_in.yml
 
@@ -37,8 +45,8 @@
 
     - name: Copy puma.service with owner and permissions
       ansible.builtin.copy:
-        src: puma_app_production.service
-        dest: /etc/systemd/system/puma_app_production.service
+        src: puma.service
+        dest: /etc/systemd/system/puma.service
         owner: deploy
         group: root
         mode: '700'
