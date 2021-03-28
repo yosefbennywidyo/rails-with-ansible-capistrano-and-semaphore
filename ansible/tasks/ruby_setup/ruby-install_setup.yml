@@ -7,8 +7,9 @@
   become_user: postgres
   community.postgresql.postgresql_user:
     name: ansible_rails
-    password: db_password
-    role_attr_flags: CREATEDB,NOSUPERUSER
+    privs: ALL
+    password: "{{ db_password[0] }}"
+    role_attr_flags: SUPERUSER, CREATEDB
 
 - name: Download ruby-install
   become: no
@@ -23,15 +24,12 @@
     creates: /home/deploy/ruby-install-0.8.1
     remote_src: yes
 
-- name: Install nvm
-  shell: >
-    curl https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh | sh
-    creates=/home/deploy/.nvm/nvm.sh
-
-- name: Install node and set version
-  shell: >
-    /bin/bash -c "source ~/.nvm/nvm.sh && nvm install 15.5.0 && nvm alias default 15.5.0"
-    creates=/home/deploy/.nvm/alias
+- name: install node 14.16.0
+  community.general.npm:
+    name: npm
+    version: '14.16.0'
+    global: yes
+    state: present
 
 - name: Install YVM
   args:

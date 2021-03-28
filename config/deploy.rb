@@ -44,7 +44,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
-set :app_domain, "widyokarsono.dev"
+set :app_domain, "widyokarsono.dev www.widyokarsono.dev"
 set :puma_user, fetch(:user)
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
 set :puma_state, "#{shared_path}/shared/tmp/pids/puma.state"
