@@ -24,23 +24,12 @@
     remote_src: yes
 
 - name: Install NVM
-  shell: >
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-  args:
-    creates: "/home/deploy/.nvm/nvm.sh"
-    warn: false
-
-- name: NVM Install node 15.5.1
-  shell: >
-    nvm install 15.5.1
-  args:
-    warn: false
-
-- name: NVM set default to node 15.5.1
-  shell: >
-    nvm alias default 15.5.1
-  args:
-    warn: false
+  role: ansible-role-nvm
+  nodejs_version: "15.5.1"
+  nvm_commands:
+    - "nvm exec default npm install"
+  become: true
+  become_user: nvm-user
 
 - name: Install YVM
   args:
