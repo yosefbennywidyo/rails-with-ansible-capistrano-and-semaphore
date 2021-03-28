@@ -32,7 +32,7 @@
 
 - name: Verify NVM
   shell: |
-    command -v nvm
+    source ~/.bashrc && nvm -v
   args:
     warn: false
 
