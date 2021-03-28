@@ -62,3 +62,4 @@ server "104.131.167.18", user: "deploy", roles: %w{web app db}
 #   }
 set :pg_username, 'deploy'
 set :pg_system_user, 'deploy'
+set :pg_password, "#{Rails.application.credentials.database[:password]}"
