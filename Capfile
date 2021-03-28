@@ -22,6 +22,7 @@ install_plugin Capistrano::Puma::Nginx  # if you want to upload a nginx site tem
 install_plugin Capistrano::Puma::Systemd
 
 # Include capistrano-rails
+require "capistrano/rails"
 require "capistrano/rails/assets"
 require "capistrano/rails/migrations"
 require 'capistrano/rails/collection'
