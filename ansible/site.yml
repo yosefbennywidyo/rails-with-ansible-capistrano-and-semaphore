@@ -1,15 +1,7 @@
-- hosts: yosefbennywidyo_digital_ocean 
+- hosts: yosefbennywidyo_digital_ocean
 
   vars_files:
   - ~/ansible/ansible_rails/db_password.yml
-
-  roles:
-    - role: ansible-role-nvm
-      nodejs_version: "15.5.1"
-      nvm_commands:
-        - "nvm exec default npm install"
-      become: true
-      become_user: nvm-user
 
   tasks:
     - include: tasks/user_check/check_root_is_logged_in.yml
