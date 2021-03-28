@@ -1,4 +1,3 @@
-require File.expand_path("./environment", __dir__)
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
