@@ -23,12 +23,13 @@
     creates: /home/deploy/ruby-install-0.8.1
     remote_src: yes
 
-- role: ansible-role-nvm
-  nodejs_version: "15.5.1"
-  nvm_commands:
-    - "nvm exec default npm install"
-  become: true
-  become_user: nvm-user
+  roles:
+  - role: ansible-role-nvm
+    nodejs_version: "15.5.1"
+    nvm_commands:
+      - "nvm exec default npm install"
+    become: true
+    become_user: nvm-user
 
 - name: Install YVM
   args:
