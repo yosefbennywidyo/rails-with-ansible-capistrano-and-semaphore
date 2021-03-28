@@ -31,12 +31,14 @@
     warn: false
 
 - name: Verify NVM
-  shell: command -v nvm
+  shell: |
+    command -v nvm
   args:
     warn: false
 
 - name: Install node 15.5.1
-  shell: "nvm install 15.5.1 && nvm alias default 15.5.1"
+  shell: |
+    nvm install 15.5.1 && nvm alias default 15.5.1
   args:
     creates: "/home/deploy/.nvm/versions/node-15.5.1"
     chdir: "/home/deploy/"
