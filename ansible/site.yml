@@ -34,6 +34,7 @@
             postgresql_users:
               - name: deploy
                 password: "{{ db_password[0] }}"
+      become: true
 
     - name: Copy puma.service with owner and permissions
       ansible.builtin.copy:

@@ -7,9 +7,8 @@
   become_user: postgres
   community.postgresql.postgresql_user:
     name: ansible_rails
-    privs: ALL
     password: "{{ db_password[0] }}"
-    role_attr_flags: SUPERUSER, CREATEDB
+    role_attr_flags: CREATEDB,SUPERUSER
 
 - name: Download ruby-install
   become: no
