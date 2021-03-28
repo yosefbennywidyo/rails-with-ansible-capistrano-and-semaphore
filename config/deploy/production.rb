@@ -1,3 +1,4 @@
+require File.expand_path("./environment", __dir__)
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
@@ -62,4 +63,4 @@ server "104.131.167.18", user: "deploy", roles: %w{web app db}
 #   }
 set :pg_username, 'deploy'
 set :pg_system_user, 'deploy'
-set :pg_password, "#{Rails.application.credentials.database[:password]}"
+set :pg_password, Rails.application.credentials.database[:password]
