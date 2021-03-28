@@ -23,8 +23,7 @@
     creates: /home/deploy/ruby-install-0.8.1
     remote_src: yes
 
-- name: Install NVM
-  role: ansible-role-nvm
+- role: ansible-role-nvm
   nodejs_version: "15.5.1"
   nvm_commands:
     - "nvm exec default npm install"
