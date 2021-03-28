@@ -30,9 +30,9 @@
     creates: "/home/deploy/.nvm/nvm.sh"
     warn: false
 
-- name: Install node 14.16.0
+- name: Install node 15.5.1
   shell: |
-    /bin/bash -c "source ~/.nvm/nvm.sh && nvm install 14.16.0 && nvm alias default 14.16.0"
+    /bin/bash -c "source ~/.nvm/nvm.sh && nvm install 15.5.1 && nvm alias default 15.5.1"
   args:
     warn: false
 
