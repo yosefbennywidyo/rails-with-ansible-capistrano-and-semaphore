@@ -27,6 +27,7 @@
   shell: |
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
   args:
+    creates: "/home/deploy/.nvm/nvm.sh"
     warn: false
 
 - name: Install node 14.16.0
