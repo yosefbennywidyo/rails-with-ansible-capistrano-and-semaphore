@@ -2,7 +2,8 @@ upstream app {
   server unix:/home/deploy/apps/shared/tmp/sockets/puma.sock fail_timeout=0;
 }
 server {
-  listen 80 default_server deferred;
+  listen 80;
+  listen [::]:80;
   server_name widyokarsono.dev www.widyokarsono.dev;
 
   access_log /home/deploy/apps/current/log/nginx.access.log;
