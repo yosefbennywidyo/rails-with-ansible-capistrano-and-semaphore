@@ -84,9 +84,6 @@ GEM
       sshkit (>= 1.9.0)
     capistrano-bundler (2.0.1)
       capistrano (~> 3.1)
-    capistrano-chruby (0.1.2)
-      capistrano (~> 3.0)
-      sshkit (~> 1.3)
     capistrano-database-yml (1.0.1)
       capistrano (>= 3.1)
       sshkit (>= 1.2.0)
@@ -173,6 +170,9 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rvm1-capistrano3 (1.4.0)
+      capistrano (~> 3.0)
+      sshkit (>= 1.2)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -226,7 +226,6 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   capistrano (~> 3.16)
-  capistrano-chruby
   capistrano-database-yml (~> 1.0.0)
   capistrano-rails (~> 1.6)
   capistrano-rails-collection
@@ -239,6 +238,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
   rails (~> 6.1.3)
+  rvm1-capistrano3
   sass-rails (>= 6)
   spring
   turbolinks (~> 5)

@@ -10,8 +10,9 @@ require 'capistrano/secrets_yml'
 # Include capistrano-database_yml
 require 'capistrano/database_yml'
 
+# require 'capistrano/chruby'
+require 'rvm1/capistrano3'
 require 'capistrano/bundler'
-require 'capistrano/chruby'
 # Include capistrano-puma
 require "capistrano/puma"
 install_plugin Capistrano::Puma  # Default puma tasks
@@ -26,6 +27,7 @@ require "capistrano/rails"
 require "capistrano/rails/assets"
 require "capistrano/rails/migrations"
 require 'capistrano/rails/collection'
+require 'capistrano/rails/console'
 # require "capistrano/passenger"
 
 # Load the SCM plugin appropriate to your project:
