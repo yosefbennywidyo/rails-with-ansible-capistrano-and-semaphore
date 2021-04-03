@@ -92,6 +92,9 @@ GEM
       capistrano-bundler (>= 1.1, < 3)
     capistrano-rails-collection (0.1.0)
       capistrano-rails (~> 1.1)
+    capistrano-rails-console (2.3.0)
+      capistrano (>= 3.5.0, < 4.0.0)
+      sshkit-interactive (~> 0.3.0)
     capistrano-secrets-yml (1.1.1)
       capistrano (~> 3.10)
       sshkit (~> 1.15)
@@ -195,6 +198,8 @@ GEM
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    sshkit-interactive (0.3.0)
+      sshkit (~> 1.12)
     thor (1.1.0)
     tilt (2.0.10)
     turbolinks (5.2.1)
@@ -229,6 +234,7 @@ DEPENDENCIES
   capistrano-database-yml (~> 1.0.0)
   capistrano-rails (~> 1.6)
   capistrano-rails-collection
+  capistrano-rails-console
   capistrano-secrets-yml (~> 1.1.0)
   capistrano3-puma!
   ed25519 (>= 1.2, < 2.0)
