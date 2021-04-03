@@ -11,7 +11,7 @@ set :branch, "main"
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/home/deploy/apps"
-set :chruby_ruby, "ruby-3.0.0"
+# set :chruby_ruby, "ruby-3.0.0"
 
 # Skip precompile assets
 set :assets_roles, []
