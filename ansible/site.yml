@@ -1,10 +1,18 @@
 - hosts: yosefbennywidyo_digital_ocean
 
   vars_files:
-  - ~/ansible/ansible_rails/db_password.yml
+  - vars/main.yml
 
   tasks:
+    - name: Install Droplet metrics
+      shell: |
+        curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash
+      args:
+        warn: false
+
     - include: tasks/user_check/check_root_is_logged_in.yml
+
+    - include: tasks/swap_setup/create_swap_file.yml
 
     - name: Update all packages to the latest version
       apt:
@@ -15,15 +23,28 @@
     - include: tasks/ruby_setup/ruby-install_setup.yml
 
     - include: tasks/authentication_setup/setup_authorized_key_for_deploy_user.yml
-    
+
     - include: tasks/user_check/check_deploy_is_logged_in.yml
 
-    - include: tasks/ruby_setup/install_ruby_3-0-0.yml
-    
-    - include: tasks/ruby_setup/chruby_setup_for_deploy_user.yml
+- hosts: yosefbennywidyo_digital_ocean
 
-    - include: tasks/ruby_setup/install_bundler.yml
+  vars_files:
+  - vars/main.yml
 
+  roles:
+    - { role: rvm.ruby,
+        tags: ruby,
+        rvm1_rubies: 'ruby-3.0.0',
+        rvm1_bundler_install: True,
+        rvm1_install_path: '/usr/local/rvm',
+        rvm1_install_flags: '--auto-dotfiles',
+        rvm1_ruby_install_flags: '--with-jemalloc',
+        rvm1_user: 'root',
+        rvm1_rvm_check_for_updates: False,
+        rvm1_autolib_mode: 3
+      }
+
+  tasks:
     - include: tasks/nginx_setup/install_nginx.yml
 
     - block: # workaround, see https://stackoverflow.com/a/56558842
@@ -33,7 +54,7 @@
           vars:
             postgresql_users:
               - name: deploy
-                password: "{{ db_password[0] }}"
+                password: "{{ db_password }}"
       become: true
 
     - name: Copy puma.service with owner and permissions
