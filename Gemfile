@@ -50,7 +50,7 @@ group :development do
   gem 'capistrano', '~> 3.16', require: false
   gem 'capistrano-rails', '~> 1.6'
   #gem 'capistrano-bundler', '~> 2.0'
-  gem 'capistrano-chruby'
+  # gem 'capistrano-chruby'
   # manage puma with capistrano
   gem 'capistrano3-puma', github: "seuros/capistrano-puma"
   # manage secrets.yml with capistrano
@@ -59,6 +59,8 @@ group :development do
   gem 'capistrano-database-yml', '~> 1.0.0'
   # manage rails tasks
   gem 'capistrano-rails-collection'
+  # manage rvm
+  gem 'rvm1-capistrano3', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
