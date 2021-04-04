@@ -34,7 +34,7 @@
   roles:
     - { role: rvm.ruby,
         tags: ruby,
-        rvm1_rubies: 'ruby-3.0.0',
+        rvm1_rubies: ['ruby-3.0.0'],
         rvm1_bundler_install: True,
         rvm1_install_path: '/usr/local/rvm',
         rvm1_install_flags: '--auto-dotfiles',
@@ -44,7 +44,14 @@
         rvm1_autolib_mode: 3
       }
 
+    - role: moviedo.nvm
+      nvm_user: deploy
+      nvm_version: "v0.38.0"
+      nvm_node_version: "14.16.0"
+
   tasks:
+    - include: tasks/yarn_setup/install_yarn.yml
+
     - include: tasks/nginx_setup/install_nginx.yml
 
     - block: # workaround, see https://stackoverflow.com/a/56558842

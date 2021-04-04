@@ -5,7 +5,7 @@
 
 - name: Install Ruby dependencies
   apt:
-    name: ['git-core', 'curl', 'dirmngr', 'gnupg', 'apt-transport-https',
+    name: ['git','git-core', 'curl', 'dirmngr', 'gnupg', 'apt-transport-https',
       'ca-certificates', 'redis-server', 'redis-tools', 'gcc', 'autoconf',
       'bison', 'nodejs', 'yarn', 'checkinstall', 'python3-psycopg2',
       'build-essential', 'zlib1g-dev', 'openssl', 'libssl-dev', 'libyaml-dev',
@@ -24,25 +24,3 @@
     name: ansible_rails
     password: "{{ db_password[0] }}"
     role_attr_flags: CREATEDB,SUPERUSER
-
-- name: Install NVM
-  shell: |
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-  args:
-    warn: false
-
-- name: Install node 14.16.0
-  shell: |
-    /bin/bash -c "source ~/.nvm/nvm.sh && nvm install 14.16.0 && nvm alias default 14.16.0"
-  args:
-    warn: false
-
-- name: Install YVM
-  args:
-    warn: false
-  shell: |
-    curl -s https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.js | node
-
-- name: Install yarn 1.22.10
-  shell: |
-    /bin/bash -c "source ~/.yvm/yvm.sh && yvm install 1.22.10 && yvm alias default 1.22.10"
