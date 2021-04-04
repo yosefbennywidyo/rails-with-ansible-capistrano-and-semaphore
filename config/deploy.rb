@@ -81,12 +81,11 @@ set :nginx_server_name, "#{fetch(:app_domain)}"
 set :nginx_sites_available_path, '/etc/nginx/sites-available'
 set :nginx_sites_enabled_path, '/etc/nginx/sites-enabled'
 set :nginx_socket_flags, fetch(:nginx_flags)
-#set :nginx_ssl_certificate, "/etc/letsencrypt/live/widyokarsono.dev/fullchain.pem"
-#set :nginx_ssl_certificate_key, "/etc/letsencrypt/live/widyokarsono.dev/privkey.pem"
-set :nginx_use_ssl, false
+set :nginx_ssl_certificate, "/etc/letsencrypt/live/widyokarsono.dev/fullchain.pem"
+set :nginx_ssl_certificate_key, "/etc/letsencrypt/live/widyokarsono.dev/privkey.pem"
+set :nginx_use_ssl, true
 set :nginx_use_http2, true
 set :nginx_downstream_uses_ssl, false
-set :master_key_local_path, "/Users/yb_widyokarsono/ansible/ansible_rails/config/master.key"
 
 
 set :rails_env, 'production'
