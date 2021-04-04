@@ -48,7 +48,7 @@ group :development do
   gem 'spring'
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.16', require: false
-  gem 'capistrano-rails', '~> 1.6'
+  gem 'capistrano-rails', '~> 1.6', require: false
   #gem 'capistrano-bundler', '~> 2.0'
   # gem 'capistrano-chruby'
   # manage puma with capistrano
