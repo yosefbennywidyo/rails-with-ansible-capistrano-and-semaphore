@@ -1,0 +1,17 @@
+- name: Add Yarn pubkey
+  ansible.builtin.apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+
+- name: Add universe repository for bionic
+  apt_repository:
+    repo: deb https://dl.yarnpkg.com/debian/ stable main
+    state: present
+
+- name: Install "yarn" node.js package globally.
+  community.general.npm:
+    name: yarn
+    version: '1.22.10'
+    global: yes
+    path: /usr/bin/yarn
+    state: present
