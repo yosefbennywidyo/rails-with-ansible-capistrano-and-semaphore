@@ -59,8 +59,6 @@ group :development do
   gem 'capistrano-database-yml', '~> 1.0.0'
   # manage rails tasks
   gem 'capistrano-rails-collection'
-  # manage rails master.key
-  gem 'capistrano-master-key', '~> 1.0.0'
   # remote rails console and dbconsole
   gem 'capistrano-rails-console', require: false
   # manage rvm
