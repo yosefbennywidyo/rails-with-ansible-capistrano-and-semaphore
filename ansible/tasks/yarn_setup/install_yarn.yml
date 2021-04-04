@@ -11,7 +11,6 @@
 - name: Install "yarn" node.js package globally.
   community.general.npm:
     name: yarn
-    version: '1.22.10'
     global: yes
-    path: /usr/bin/yarn
+    executable: /home/deploy/.nvm/versions/node/v14.16.0/bin/npm
     state: present
