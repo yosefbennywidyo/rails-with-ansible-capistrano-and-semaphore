@@ -7,7 +7,7 @@
   apt:
     name: ['git','git-core', 'curl', 'dirmngr', 'gnupg', 'apt-transport-https',
       'ca-certificates', 'redis-server', 'redis-tools', 'gcc', 'autoconf',
-      'bison', 'nodejs', 'yarn', 'checkinstall', 'python3-psycopg2',
+      'bison', 'nodejs', 'checkinstall', 'python3-psycopg2',
       'build-essential', 'zlib1g-dev', 'openssl', 'libssl-dev', 'libyaml-dev',
       'libreadline-dev', 'libreadline6-dev', 'libxml2-dev', 'libffi-dev',
       'libncurses5-dev', 'libxslt1-dev', 'libcurl4-openssl-dev',
