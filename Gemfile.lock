@@ -87,6 +87,9 @@ GEM
     capistrano-database-yml (1.0.1)
       capistrano (>= 3.1)
       sshkit (>= 1.2.0)
+    capistrano-master-key (1.0.2)
+      capistrano (~> 3.11)
+      sshkit (~> 1.17)
     capistrano-rails (1.6.1)
       capistrano (~> 3.1)
       capistrano-bundler (>= 1.1, < 3)
@@ -230,6 +233,7 @@ DEPENDENCIES
   byebug
   capistrano (~> 3.16)
   capistrano-database-yml (~> 1.0.0)
+  capistrano-master-key (~> 1.0.0)
   capistrano-rails (~> 1.6)
   capistrano-rails-collection
   capistrano-rails-console
