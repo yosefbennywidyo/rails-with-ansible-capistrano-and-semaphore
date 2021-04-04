@@ -9,6 +9,8 @@ require 'capistrano/secrets_yml'
 
 # Include capistrano-database_yml
 require 'capistrano/database_yml'
+# Include capistrano-master-key
+require 'capistrano/master_key'
 
 # require 'capistrano/chruby'
 require 'rvm1/capistrano3'
